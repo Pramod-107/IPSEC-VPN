@@ -11,18 +11,6 @@ To ensure network resilience, the design includes:
 * [cite_start]**Internal Redundancy:** Port-Channel (EtherChannel) links between routers and switches[cite: 8].
 * [cite_start]**WAN Redundancy:** Dual ISP serial links with automatic failover capabilities[cite: 8].
 
----
-
-## 👥 Team Members
-| Name | ID |
-| :--- | :--- |
-| **Surya Pramod** | BL.SC.U4AIE24252 |
-| **S.Santhosh** | BL.SC.U4AIE24248 |
-| **Varshith KCS** | BL.SC.U4AIE24235 |
-
-[cite_start]*[cite: 3]*
-
----
 
 ## 🏗️ Network Topology & Design
 
