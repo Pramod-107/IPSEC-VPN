@@ -1,54 +1,44 @@
 # Secure Host-Specific Site-to-Site IPsec VPN with Redundancy
 
-![Cisco Packet Tracer](https://img.shields.io/badge/Simulation-Cisco%20Packet%20Tracer-blue)
-![Protocol](https://img.shields.io/badge/Protocol-IPsec%20VPN-red)
-![Security](https://img.shields.io/badge/Encryption-AES--256-green)
+![Status](https://img.shields.io/badge/Status-Completed-success)
+![Tool](https://img.shields.io/badge/Cisco-Packet%20Tracer-blue)
+![Security](https://img.shields.io/badge/Security-IPsec%20AES--256-red)
 
 ## 📄 Abstract
-This project implements a secure **Site-to-Site IPsec VPN tunnel** between two organizations, *MyCo* and *TheirCo*. Unlike standard VPNs that tunnel all traffic between subnets, this solution utilizes Access Control Lists (ACLs) to restrict encrypted communication exclusively between **System-A** (MyCo) and **System-C** (TheirCo).
+This project focuses on establishing a secure **Site-to-Site IPsec VPN tunnel** between two organizations, *MyCo* and *TheirCo*. Unlike standard VPNs that tunnel traffic between entire subnets, this solution implements strict **Host-Specific Tunneling**. [cite_start]Encrypted communication is permitted *exclusively* between **System-A** (MyCo) and **System-C** (TheirCo), while traffic from other devices is blocked or routed normally[cite: 6].
 
-To ensure high availability and reliability, the network design incorporates **Port-Channel (EtherChannel)** for internal link redundancy and **Dual ISP Serial Links** for WAN failover.
+To ensure network resilience, the design includes:
+* [cite_start]**Internal Redundancy:** Port-Channel (EtherChannel) links between routers and switches[cite: 8].
+* [cite_start]**WAN Redundancy:** Dual ISP serial links with automatic failover capabilities[cite: 8].
+
+---
 
 ## 👥 Team Members
-* **Surya Pramod** - BL.SC.U4AIE24252
-* **S.Santhosh** - BL.SC.U4AIE24248
-* **Varshith KCS** - BL.SC.U4AIE24235
+| Name | ID |
+| :--- | :--- |
+| **Surya Pramod** | BL.SC.U4AIE24252 |
+| **S.Santhosh** | BL.SC.U4AIE24248 |
+| **Varshith KCS** | BL.SC.U4AIE24235 |
+
+[cite_start]*[cite: 3]*
 
 ---
 
-## 🏗️ Project Architecture
+## 🏗️ Network Topology & Design
 
-### Key Features
-* [cite_start]**Host-Specific Tunneling:** Encrypted traffic is permitted *only* between specific hosts (System-A and System-C)[cite: 232].
-* [cite_start]**Strong Encryption:** Uses **AES-256** encryption with Pre-Shared Key (PSK) authentication[cite: 233].
-* [cite_start]**Internal Redundancy:** Configured Port-Channel between the router and switch to increase bandwidth and provide link failover[cite: 234].
-* [cite_start]**WAN Redundancy:** Dual ISP serial links configured with adjusted administrative distances to allow automatic failover if the primary link goes down[cite: 246].
+### IP Addressing Schema
+| Device | Interface | IP Address | Subnet Mask | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **System-A** | NIC | 10.6.48.1 | 255.255.0.0 | [cite_start]MyCo Host (Allowed) [cite: 33] |
+| **System-C** | NIC | 10.196.31.8 | 255.255.255.0 | [cite_start]TheirCo Host (Allowed) [cite: 35] |
+| **MyCo Router** | Serial 1/1 | 103.24.99.2 | 255.255.255.252 | [cite_start]Primary Link [cite: 103] |
+| **MyCo Router** | Serial 1/2 | 103.24.99.102 | 255.255.255.252 | [cite_start]Backup Link [cite: 107] |
 
-### Network Topology
-The network consists of:
-1.  **MyCo Site:** Hosting System-A (10.6.48.1/16).
-2.  **TheirCo Site:** Hosting System-C (10.196.31.8/24).
-3.  **ISP Layer:** Connecting the two sites via Primary and Backup serial links.
+### Key Components
+* [cite_start]**Routers:** Cisco 2811 (handling ISAKMP, IPsec, and routing)[cite: 48].
+* [cite_start]**Switches:** Cisco 2950-24 (configured with EtherChannel)[cite: 45].
+* **End Devices:** Specific PCs and Servers designated for secure communication.
 
----
-
-## 🛠️ Technologies & Components
-* **Hardware Simulation:** Cisco 2811 Routers, Cisco 2950-24 Switches.
-* [cite_start]**Protocols:** * **IPsec (Internet Protocol Security):** For data confidentiality and integrity[cite: 483].
-    * [cite_start]**ISAKMP (IKEv1):** For negotiating security associations[cite: 302].
-    * **ESP (Encapsulating Security Payload):** For encapsulating data.
-* **Redundancy Protocols:** EtherChannel (L2), Floating Static Routes (L3).
-
----
-
-## ⚙️ Configuration Highlights
-
-### 1. ISAKMP (Phase 1) Policy
-We established the IKE Phase 1 policy to handle the secure key exchange using AES-256 and SHA hashing.
-
-```cisco
-crypto isakmp policy 10
- encr aes 256
  authentication pre-share
  group 5
  lifetime 3600
